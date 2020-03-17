@@ -15,19 +15,18 @@
 
     <body>
             <div class="search">
-                <div id="addBar"><h3>Add a Movie</h3></div>
+                <div id="addBar"><h3>Add a Video Game</h3></div>
                 <form>
-                    <input type="text">
+                    <input id="addTextBox" type="text">
+                    <button id="submit">Submit</button>
                 </form>
-                <br>
-                <button id="submit">Submit</button>
             </div>
 
-            <div class="Content">
-                <button data-movie="" id="addedContentButtons"></button>
-                <div id="gifs"></div>
+            <div class="Content" id="gifs">
+                <div id="gifDisplay"></div>
             </div>
-
+ <!-- Add columns and rows for layout -->
+ 
         <!-- Link to javascript-->
         <script src="assets/javascript/app.js"></script>    
     </body>

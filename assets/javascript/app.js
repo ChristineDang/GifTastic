@@ -1,33 +1,93 @@
-//listens to any button clicked
-$("button").on("click", function() {
-    //specifies which button tht was clicked
-    var movie = $(this).attr("data-movie");
-    //searches via URL for the moivie gif that was added to the page
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + movie + "tpyfQ96kkjx3avvQ3PpQn1l7KklEceKd";
+$(document).ready(function(){
 
-    //request to retrieve data from the server
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    })
+    //create the array of games
+    var topics = ["League of Legends", "Apex", "Overwatch", "Fortnite", "Halo Reach", "Far Cry 5", "Call of Duty", "Rocket League",
+    "Borderlands", "Stardew Valley", "Animal Crossing", "Sims 4", "Minecraft", "Runescape", "Club Penguin", "Hearthstone"];
 
-    //link up the search text box from .html to .js
-    //create function that manipulates the .html by adding a new button with searched movie written on it
-    //have those buttons retrieve corresponding movie gifs from the API
+    //create root div to hold app components
+    const app = document.getElementById('gifs');
 
-    //What do do with the data found in the API
-    .then(function(dataReturn){
-        //create a variable that stores the array of results found from the API
-        var dataFound = dataReturn.data;
-        //a loop needs to be created to run through all the data returned, through a created specified list of constraints
-        for (var i = 0; dataFound.length; i++) {
-            if (dataFound[i]) {
+    const container = document.createElement('div');
+    container.setAttribute('class', 'container');
 
-                //create more variables to organize/store the data
-                //append the gifs to the created divs in .js
-                //prepend the divs (that now contain the gifs) to the #gifs on the .html document
-            }
+    app.appendChild(container);
+
+    console.log(app)
+
+        $(document).ready(function() {
+
+        //loop through the topics array and assign a button to the container
+        topics.forEach(topic =>{
+            const setTopics = document.createElement('button');
+            setTopics.setAttribute('type', 'button');
+            setTopics.setAttribute('class', 'btn btn-info');
+            setTopics.setAttribute('data-game', topic)
+            setTopics.textContent = topic;
+
+            container.appendChild(setTopics);
+
+        })
+
+    const gifs = document.createElement('div');
+    gifs.setAttribute('id', 'list-gifs');
+
+    container.appendChild(gifs);
+   
+        $("button").on("click", function(){
+            $('#list-gifs').empty();
+            var videoGame = $(this).attr("data-game");
+            var qURL = "http://api.giphy.com/v1/gifs/search?q=" + videoGame + "&api_key=kz3EgsMqT33hUlh4lISAf8x4BdsetIqh&limit=10"
+
+            $.ajax({
+            url: qURL,
+            method: "GET"
+            }).then(function(response){
+
+            var results = response.data;
+                //populates the gifs once buttons are clicked on
+                for(var i = 0; i < results.length; i++) {
+                    // var gifDiv = $("<div>");
+                    var rating = results[i].rating;
+
+                    var h4 = $("<h4>").text("Gif Rating: " + rating);
+
+                    var gameImg = $("<img>");
+
+                    gameImg.attr("src", 
+                    //images now made static with _still
+                    results[i].images.fixed_height_still.url);
+                    h4.append(gameImg);
+
+                    $("#list-gifs").prepend(h4);
+                }
+            })
+        })
+    //changes the game.Img.attr("src". results[i].images.fixed_height_still.url) to animate
+        //within the if statement is broken... I think the syntax at line 67 is correct and 68 is incorrect
+
+        //was trying to change the attribute of the game image to run instead of still at line 68
+            //tried $(this).html(gameImg.attr(results[i].images.fixed_height.url))
+            //tried  $(this).html(gameImg.attr(animate()))
+
+    function runGif() {
+        if ($(this).attr("src") === "still") {
+            $(this).html(gameImg.animate())
+            console.log("animate")
         }
+    }
+    $(document).on("click", runGif);
+    console.log(runGif)
+
+    //create search and submit gif buttons
+        // $("#submit").on("click", function(){
+        //     $("#submit").empty();
+        //     var input = $("#submit").val();
+        //     var qURL = "http://api.giphy.com/v1/gifs/search?q=" + videoGame + "&api_key=kz3EgsMqT33hUlh4lISAf8x4BdsetIqh&limit=10"
+        //     topics.push(input)
+        //     console.log(input)
+        // })
+    //Gif buttons working, search and submit button is not
+    //need to append
 
     });
-});
+})
